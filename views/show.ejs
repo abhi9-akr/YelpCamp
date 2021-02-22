@@ -1,0 +1,64 @@
+<% include partials/header %>
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-3">
+			<p class="lead">YelpCamp</p>
+			<div class="list-group">
+				<li class="list-group-item active">Info 1</li>
+				<li class="list-group-item">Info 2</li>
+				<li class="list-group-item">Info 3</li>
+			</div>
+		</div>
+		<div class="col-md-9">
+			<div class="img-thumbnail">
+				<img class="img-fluid" src="<%= campground.image %>">
+				<div class="caption-full">
+					<h4 class="text-right">$<%= campground.price %>/night</h4>
+					<h4><a href="/campgrounds"><%= campground.name%></a></h4>
+					<p><%= campground.description %></p>
+					<p>
+						<em>Submitted By:- <%= campground.author.username %> &nbsp &nbsp</em>
+					</p>
+
+					<% if(currentUser && campground.author.id.equals(currentUser._id)){ %>
+						<a class="btn btn-sm btn-warning" href="/campgrounds/<%= campground._id%>/edit">Edit</a>&nbsp &nbsp &nbsp
+						<form id="delete" action="/campgrounds/<%= campground._id%>/?_method=DELETE" method="POST">
+							<button class= "btn btn-sm btn-danger">Delete</button>
+						</form>
+					<% } %>	
+				</div>
+			</div>
+			<div class="p-3 mb-2 bg-secondary text-dark rounded">
+				<div class="text-right">
+					<a class="btn btn-success" href="/campgrounds/<%= campground._id%>/comments/new"> Add Ur View </a>
+				</div>	
+				<hr>		
+				<% campground.comments.forEach(function(comment){ %>
+					<div class="row">
+						<div class="col-md-12">
+							<strong><%= comment.author.username %></strong>
+							<span class="float-right">10 Days ago</span>
+							<p>
+							 <%= comment.text %>
+					 		</p>
+					 	<% if(currentUser && (comment.author.username == currentUser.username)){ %>
+					 		<a class="btn btn-sm btn-warning" href="/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit">Edit</a>
+					 		<form id=delete action="/campgrounds/<%= campground._id %>/comments/<%= comment._id%>?_method=DELETE" method= "POST">
+					 			<input class="btn btn-sm btn-danger" type="submit" value="Delete">
+					 		</form>
+					 	<% } %>
+						</div>
+					</div>
+				<% }); %>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+<% include partials/footer %>
